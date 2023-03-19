@@ -166,7 +166,7 @@ func (s *Site) PostBySlug(slug string) PostWithID {
 	// FIXME: This needs to be optimized.
 	var p PostWithID
 	for k, v := range s.Posts {
-		if v.URL == slug {
+		if v.URL == slug || (len(v.Alias) > 0 && v.Alias == slug){
 			p = PostWithID{
 				Post: v,
 				ID:   k,

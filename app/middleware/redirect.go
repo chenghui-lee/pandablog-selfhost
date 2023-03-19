@@ -37,7 +37,7 @@ func (c *Handler) Redirect(next http.Handler) http.Handler {
 			  host = r.Host
 			}
 			if !strings.Contains(host, c.SiteURL) {
-			  http.Redirect(w, r, fmt.Sprintf("%v://%v%v", c.SiteScheme, c.SiteURL, r.URL.Path), http.StatusPermanentRedirect)
+			  http.Redirect(w, r, fmt.Sprintf("%v://%v%v", c.SiteScheme, c.SiteURL, r.URL.Path), http.StatusTemporaryRedirect)
 			  return
 			}
 		}

@@ -11,6 +11,11 @@
         <span class="helptext">eg: 'why-i-like-bears'</span>
     </p>
     <p>
+        <label for="id_alias">Alias (optional):</label>
+        <input type="text" name="alias" value="{{.alias}}">
+        <span class="helptext">Useful when you want to redirect your old site to here</span>
+    </p>
+    <p>
         <label for="id_canonical_url">Canonical url (optional):</label>
         <input type="text" name="canonical_url" id="id_canonical_url" value="{{.canonical}}">
         <span class="helptext">

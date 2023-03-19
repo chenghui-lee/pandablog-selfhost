@@ -68,6 +68,7 @@ func (c *Post) show(w http.ResponseWriter, r *http.Request) (status int, err err
 	}
 
 	slug := way.Param(r.Context(), "slug")
+	// To-Do: Redirect Alias to Slug
 	p := site.PostBySlug(slug)
 
 	// Determine if in preview mode.
