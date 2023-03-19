@@ -47,6 +47,7 @@ func (t PostList) Less(i, j int) bool {
 type Post struct {
 	Title     string    `json:"title"`
 	URL       string    `json:"url"`
+	Alias     string    `json:"alias"`
 	Canonical string    `json:"canonical"`
 	Created   time.Time `json:"created"`
 	Updated   time.Time `json:"updated"`

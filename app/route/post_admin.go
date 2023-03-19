@@ -86,6 +86,7 @@ func (c *AdminPost) store(w http.ResponseWriter, r *http.Request) (status int, e
 	p.Page = r.FormValue("is_page") == "on"
 	p.Published = r.FormValue("publish") == "on"
 	p.HideInNav = r.FormValue("hide_in_nav") == "on"
+	p.Alias = r.FormValue("alias")
 
 	// Save to storage.
 	site.UpdatePost(id.String(), &p)
@@ -125,6 +126,7 @@ func (c *AdminPost) edit(w http.ResponseWriter, r *http.Request) (status int, er
 	vars["page"] = p.Page
 	vars["published"] = p.Published
 	vars["hideinnav"] = p.HideInNav
+	vars["alias"] = p.Alias
 
 	return c.Render.Template(w, r, "dashboard", "post_edit", vars)
 }
@@ -169,6 +171,7 @@ func (c *AdminPost) update(w http.ResponseWriter, r *http.Request) (status int, 
 	p.Page = r.FormValue("is_page") == "on"
 	p.Published = r.FormValue("publish") == "on"
 	p.HideInNav = r.FormValue("hide_in_nav") == "on"
+	p.Alias = r.FormValue("alias")
 
 	site.UpdatePost(ID, &p)
 
