@@ -25,7 +25,9 @@ func (c *XMLUtil) Robots(w http.ResponseWriter, r *http.Request) (status int, er
 	w.Header().Set("Content-Type", "text/plain")
 	text :=
 		`User-agent: *
-Allow: /`
+Allow: /
+Disallow: /login/*
+Disallow: /login`
 	fmt.Fprint(w, text)
 	return
 }
