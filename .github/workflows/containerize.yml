@@ -61,3 +61,31 @@ jobs:
         run: |
           rm -rf /tmp/.buildx-cache
           mv /tmp/.buildx-cache-new /tmp/.buildx-cache
+
+# Quay.io
+# Currently double build image, need to think of a way to
+# reuse the image built above
+  quay:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Build Image
+      id: build-image-quay
+      uses: redhat-actions/buildah-build@v2
+      with:
+        image: polarbear
+        tags: latest ${{ github.sha }}
+        containerfiles: |
+          ./Dockerfile
+
+    - name: Push To quay.io
+      id: push-to-quay
+      uses: redhat-actions/push-to-registry@v2
+      with:
+        image: ${{ steps.build-image-quay.outputs.image }}
+        tags: ${{ steps.build-image-quay.outputs.tags }}
+        registry: quay.io/${{ secrets.QUAY_USERNAME }}
+        username: ${{ secrets.QUAY_ROBOT_ACCOUNT }}
+        password: ${{ secrets.QUAY_TOKEN }}
