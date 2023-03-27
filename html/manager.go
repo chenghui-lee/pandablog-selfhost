@@ -12,9 +12,9 @@ import (
 	"path"
 	"strings"
 
-	"go.yhsif.com/pandablog/app/lib/datastorage"
-	"go.yhsif.com/pandablog/app/lib/websession"
-	"go.yhsif.com/pandablog/assets"
+	"github.com/chenghui-lee/pandablog-selfhost/app/lib/datastorage"
+	"github.com/chenghui-lee/pandablog-selfhost/app/lib/websession"
+	"github.com/chenghui-lee/pandablog-selfhost/assets"
 )
 
 //go:embed *

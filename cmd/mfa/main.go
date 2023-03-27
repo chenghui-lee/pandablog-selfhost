@@ -7,8 +7,8 @@ import (
 
 	"github.com/mdp/qrterminal/v3"
 
-	"go.yhsif.com/pandablog/app/lib/timezone"
-	"go.yhsif.com/pandablog/app/lib/totp"
+	"github.com/chenghui-lee/pandablog-selfhost/app/lib/timezone"
+	"github.com/chenghui-lee/pandablog-selfhost/app/lib/totp"
 )
 
 func init() {

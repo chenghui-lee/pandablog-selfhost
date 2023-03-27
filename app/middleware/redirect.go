@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"strings"
 
-	"go.yhsif.com/pandablog/app/lib/envdetect"
+	"github.com/chenghui-lee/pandablog-selfhost/app/lib/envdetect"
 )
 
 // Redirect will handle all redirects required.
@@ -23,22 +23,21 @@ func (c *Handler) Redirect(next http.Handler) http.Handler {
 		// code below.
 		// Redirect to the correct website.
 
-
 		// if !envdetect.RunningLocalDev() && len(c.SiteURL) > 0 && !strings.Contains(r.Host, c.SiteURL){
 		// 	http.Redirect(w, r, fmt.Sprintf("%v://%v%v", c.SiteScheme, c.SiteURL, r.URL.Path), http.StatusPermanentRedirect)
 		// 	return
 		// }
-		
+
 		if !envdetect.RunningLocalDev() && len(c.SiteURL) > 0 {
 			var host string
 			if len(r.Header.Get("X-Forwarded-Host")) > 0 {
-			  host = r.Header.Get("X-Forwarded-Host")
+				host = r.Header.Get("X-Forwarded-Host")
 			} else {
-			  host = r.Host
+				host = r.Host
 			}
 			if !strings.Contains(host, c.SiteURL) {
-			  http.Redirect(w, r, fmt.Sprintf("%v://%v%v", c.SiteScheme, c.SiteURL, r.URL.Path), http.StatusTemporaryRedirect)
-			  return
+				http.Redirect(w, r, fmt.Sprintf("%v://%v%v", c.SiteScheme, c.SiteURL, r.URL.Path), http.StatusTemporaryRedirect)
+				return
 			}
 		}
 

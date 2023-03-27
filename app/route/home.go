@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"time"
 
-	"go.yhsif.com/pandablog/app/model"
+	"github.com/chenghui-lee/pandablog-selfhost/app/model"
 )
 
 // HomePost -

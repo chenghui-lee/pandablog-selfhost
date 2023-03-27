@@ -6,8 +6,8 @@ import (
 
 	"github.com/matryer/way"
 
-	"go.yhsif.com/pandablog/app/lib/htmltemplate"
-	"go.yhsif.com/pandablog/app/model"
+	"github.com/chenghui-lee/pandablog-selfhost/app/lib/htmltemplate"
+	"github.com/chenghui-lee/pandablog-selfhost/app/model"
 )
 
 // Post -

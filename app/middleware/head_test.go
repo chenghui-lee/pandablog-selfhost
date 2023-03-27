@@ -5,7 +5,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"go.yhsif.com/pandablog/app/middleware"
+	"github.com/chenghui-lee/pandablog-selfhost/app/middleware"
 )
 
 func TestNewSession(t *testing.T) {

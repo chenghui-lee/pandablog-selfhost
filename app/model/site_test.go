@@ -3,7 +3,7 @@ package model_test
 import (
 	"testing"
 
-	"go.yhsif.com/pandablog/app/model"
+	"github.com/chenghui-lee/pandablog-selfhost/app/model"
 )
 
 func TestSiteURL(t *testing.T) {

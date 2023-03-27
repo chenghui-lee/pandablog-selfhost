@@ -11,8 +11,8 @@ import (
 
 	"github.com/alexedwards/scs/v2"
 
-	"go.yhsif.com/pandablog/app/lib/datastorage"
-	"go.yhsif.com/pandablog/app/lib/websession"
+	"github.com/chenghui-lee/pandablog-selfhost/app/lib/datastorage"
+	"github.com/chenghui-lee/pandablog-selfhost/app/lib/websession"
 )
 
 func TestNewSession(t *testing.T) {

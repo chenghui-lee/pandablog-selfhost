@@ -5,11 +5,11 @@ import (
 	"fmt"
 	"log"
 	"os"
+
 	"golang.org/x/crypto/ssh/terminal"
 
-
-	"go.yhsif.com/pandablog/app/lib/passhash"
-	"go.yhsif.com/pandablog/app/lib/timezone"
+	"github.com/chenghui-lee/pandablog-selfhost/app/lib/passhash"
+	"github.com/chenghui-lee/pandablog-selfhost/app/lib/timezone"
 )
 
 func init() {

@@ -6,8 +6,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"go.yhsif.com/pandablog/app/lib/router"
-	"go.yhsif.com/pandablog/app/route"
+	"github.com/chenghui-lee/pandablog-selfhost/app/lib/router"
+	"github.com/chenghui-lee/pandablog-selfhost/app/route"
 )
 
 func setupRouter() *router.Mux {
