@@ -6,8 +6,8 @@ import (
 	"testing"
 	"time"
 
-	"go.yhsif.com/pandablog/app/lib/datastorage"
-	"go.yhsif.com/pandablog/app/lib/websession"
+	"github.com/chenghui-lee/pandablog-selfhost/app/lib/datastorage"
+	"github.com/chenghui-lee/pandablog-selfhost/app/lib/websession"
 )
 
 func TestNewJSONSession(t *testing.T) {

@@ -3,8 +3,8 @@ package htmltemplate
 import (
 	"net/http"
 
-	"go.yhsif.com/pandablog/app/model"
-	"go.yhsif.com/pandablog/html"
+	"github.com/chenghui-lee/pandablog-selfhost/app/model"
+	"github.com/chenghui-lee/pandablog-selfhost/html"
 )
 
 // New returns a HTML template engine.

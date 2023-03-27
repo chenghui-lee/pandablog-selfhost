@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"log"
 
-	"go.yhsif.com/pandablog/app/lib/timezone"
+	"github.com/chenghui-lee/pandablog-selfhost/app/lib/timezone"
 )
 
 func init() {

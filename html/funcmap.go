@@ -6,10 +6,10 @@ import (
 	"os"
 	"time"
 
-	"go.yhsif.com/pandablog/app/lib/datastorage"
-	"go.yhsif.com/pandablog/app/lib/envdetect"
-	"go.yhsif.com/pandablog/app/lib/websession"
-	"go.yhsif.com/pandablog/app/model"
+	"github.com/chenghui-lee/pandablog-selfhost/app/lib/datastorage"
+	"github.com/chenghui-lee/pandablog-selfhost/app/lib/envdetect"
+	"github.com/chenghui-lee/pandablog-selfhost/app/lib/websession"
+	"github.com/chenghui-lee/pandablog-selfhost/app/model"
 )
 
 // FuncMap returns a map of template functions that can be used in templates.

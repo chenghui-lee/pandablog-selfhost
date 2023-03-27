@@ -7,7 +7,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/matryer/way"
 
-	"go.yhsif.com/pandablog/app/model"
+	"github.com/chenghui-lee/pandablog-selfhost/app/model"
 )
 
 // AdminPost -

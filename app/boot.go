@@ -10,12 +10,12 @@ import (
 
 	"github.com/alexedwards/scs/v2"
 
-	"go.yhsif.com/pandablog/app/lib/datastorage"
-	"go.yhsif.com/pandablog/app/lib/htmltemplate"
-	"go.yhsif.com/pandablog/app/lib/websession"
-	"go.yhsif.com/pandablog/app/middleware"
-	"go.yhsif.com/pandablog/app/route"
-	"go.yhsif.com/pandablog/html"
+	"github.com/chenghui-lee/pandablog-selfhost/app/lib/datastorage"
+	"github.com/chenghui-lee/pandablog-selfhost/app/lib/htmltemplate"
+	"github.com/chenghui-lee/pandablog-selfhost/app/lib/websession"
+	"github.com/chenghui-lee/pandablog-selfhost/app/middleware"
+	"github.com/chenghui-lee/pandablog-selfhost/app/route"
+	"github.com/chenghui-lee/pandablog-selfhost/html"
 )
 
 var (

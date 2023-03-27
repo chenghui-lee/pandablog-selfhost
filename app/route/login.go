@@ -10,9 +10,9 @@ import (
 
 	"github.com/matryer/way"
 
-	"go.yhsif.com/pandablog/app/lib/envdetect"
-	"go.yhsif.com/pandablog/app/lib/passhash"
-	"go.yhsif.com/pandablog/app/lib/totp"
+	"github.com/chenghui-lee/pandablog-selfhost/app/lib/envdetect"
+	"github.com/chenghui-lee/pandablog-selfhost/app/lib/passhash"
+	"github.com/chenghui-lee/pandablog-selfhost/app/lib/totp"
 )
 
 // AuthUtil -
