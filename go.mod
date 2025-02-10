@@ -9,10 +9,10 @@ require (
 	github.com/google/uuid v1.6.0
 	github.com/matryer/way v0.0.0-20180416093233-9632d0c407b0
 	github.com/mdp/qrterminal/v3 v3.2.0
-	github.com/microcosm-cc/bluemonday v1.0.26
+	github.com/microcosm-cc/bluemonday v1.0.27
 	github.com/russross/blackfriday/v2 v2.1.0
 	go.yhsif.com/stalecache v0.2.0
-	golang.org/x/crypto v0.23.0
+	golang.org/x/crypto v0.33.0
 	jaytaylor.com/html2text v0.0.0-20230321000545-74c2419ad056
 )
 
@@ -42,12 +42,12 @@ require (
 	go.opentelemetry.io/otel v1.24.0 // indirect
 	go.opentelemetry.io/otel/metric v1.24.0 // indirect
 	go.opentelemetry.io/otel/trace v1.24.0 // indirect
-	golang.org/x/net v0.25.0 // indirect
+	golang.org/x/net v0.34.0 // indirect
 	golang.org/x/oauth2 v0.20.0 // indirect
-	golang.org/x/sync v0.7.0 // indirect
-	golang.org/x/sys v0.20.0 // indirect
-	golang.org/x/term v0.20.0 // indirect
-	golang.org/x/text v0.15.0 // indirect
+	golang.org/x/sync v0.11.0 // indirect
+	golang.org/x/sys v0.30.0 // indirect
+	golang.org/x/term v0.29.0 // indirect
+	golang.org/x/text v0.22.0 // indirect
 	golang.org/x/time v0.5.0 // indirect
 	google.golang.org/api v0.182.0 // indirect
 	google.golang.org/genproto v0.0.0-20240528184218-531527333157 // indirect
