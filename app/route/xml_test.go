@@ -38,7 +38,7 @@ func TestXML(t *testing.T) {
 	if err != nil {
 		t.Errorf("Failed to read body: %v", err)
 	}
-	if got, want := string(b), "User-agent: *\nAllow: /\nDisallow: /login/*\nDisallow: /login"; got != want {
+	if got, want := string(b), "User-agent: *\nDisallow: /login/*\nDisallow: /login"; got != want {
 		t.Errorf("body got %q want %q", got, want)
 	}
 }
