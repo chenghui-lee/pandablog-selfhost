@@ -32,6 +32,101 @@
     }
     </style>
     {{end}}
+    <style>
+    /* Table of Contents styles */
+    .table-of-contents {
+        background-color: #f8f9fa;
+        border: 1px solid #eaecef;
+        border-radius: 3px;
+        padding: 15px 20px;
+        margin-bottom: 20px;
+    }
+    
+    .toc-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+    
+    .toc-header h2 {
+        margin: 0;
+        font-size: 1.2em;
+    }
+    
+    #toc-toggle {
+        background: none;
+        border: none;
+        color: #666;
+        cursor: pointer;
+        font-size: 18px;
+        font-weight: bold;
+        padding: 0 5px;
+        line-height: 1;
+    }
+    
+    #toc-toggle:hover {
+        color: #333;
+    }
+    
+    .toc-content {
+        transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
+        overflow: hidden;
+        max-height: 1000px; /* Large enough to contain content */
+        opacity: 1;
+    }
+    
+    .toc-content.collapsed {
+        max-height: 0;
+        opacity: 0;
+        margin-top: 0;
+        margin-bottom: 0;
+    }
+    
+    .table-of-contents ul {
+        list-style-type: none;
+        padding-left: 0;
+        margin-bottom: 0;
+    }
+    
+    .table-of-contents li {
+        margin-bottom: 5px;
+        line-height: 1.5;
+    }
+    
+    .table-of-contents a {
+        color: #0366d6;
+        text-decoration: none;
+    }
+    
+    .table-of-contents a:hover {
+        text-decoration: underline;
+    }
+    
+    /* Back to Top button styles */
+    #back-to-top {
+        display: none;
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 40px;
+        height: 40px;
+        background-color: #333;
+        color: #fff;
+        border-radius: 50%;
+        text-align: center;
+        line-height: 40px;
+        font-size: 20px;
+        cursor: pointer;
+        opacity: 0.7;
+        z-index: 99;
+        transition: opacity 0.3s;
+    }
+    
+    #back-to-top:hover {
+        opacity: 1;
+    }
+    </style>
     {{if SiteStyles}}
     <style>
     {{SiteStyles}}

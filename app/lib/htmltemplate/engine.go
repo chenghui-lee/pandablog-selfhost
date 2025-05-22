@@ -50,7 +50,8 @@ func (te *Engine) partialTemplate(w http.ResponseWriter, r *http.Request, mainTe
 	if err != nil {
 		return http.StatusInternalServerError, err
 	}
-	t, err = te.sanitizedContent(t, "footer", footer)
+	// Footer never needs TOC
+	t, err = te.sanitizedContent(t, "footer", footer, false)
 	if err != nil {
 		return http.StatusInternalServerError, err
 	}
@@ -87,13 +88,16 @@ func (te *Engine) Post(w http.ResponseWriter, r *http.Request, mainTemplate stri
 	if err != nil {
 		return http.StatusInternalServerError, err
 	}
-	t, err = te.sanitizedContent(t, "footer", footer)
+	// Footer never needs TOC
+	t, err = te.sanitizedContent(t, "footer", footer, false)
 	if err != nil {
 		return http.StatusInternalServerError, err
 	}
 
 	// Parse the content.
-	t, err = te.sanitizedContent(t, "content", post.Content)
+	// Only add TOC for blog posts (not pages)
+	isBlogPost := !post.Page
+	t, err = te.sanitizedContent(t, "content", post.Content, isBlogPost)
 	if err != nil {
 		return http.StatusInternalServerError, err
 	}

@@ -103,6 +103,52 @@
     <script src="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/components/prism-core.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/plugins/autoloader/prism-autoloader.min.js"></script>
     {{end}}
+    
+    {{if .pubdate}}
+    <script>
+    // Back to top button functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        var backToTopButton = document.getElementById('back-to-top');
+        if (backToTopButton) {
+            // Show button when user scrolls down 300px from the top
+            window.addEventListener('scroll', function() {
+                if (window.pageYOffset > 300) {
+                    backToTopButton.style.display = 'block';
+                } else {
+                    backToTopButton.style.display = 'none';
+                }
+            });
+            
+            // Smooth scroll to top when button is clicked
+            backToTopButton.addEventListener('click', function(e) {
+                e.preventDefault();
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+        }
+        
+        // Table of Contents toggle functionality
+        var tocToggle = document.getElementById('toc-toggle');
+        var tocContent = document.getElementById('toc-list');
+        
+        if (tocToggle && tocContent) {
+            tocToggle.addEventListener('click', function() {
+                // Toggle the collapsed class
+                tocContent.classList.toggle('collapsed');
+                
+                // Update the aria-expanded attribute
+                var isExpanded = tocContent.classList.contains('collapsed') ? 'false' : 'true';
+                tocToggle.setAttribute('aria-expanded', isExpanded);
+                
+                // Update the toggle button text
+                tocToggle.textContent = isExpanded === 'true' ? '−' : '+';
+            });
+        }
+    });
+    </script>
+    {{end}}
 </body>
 
 </html>
