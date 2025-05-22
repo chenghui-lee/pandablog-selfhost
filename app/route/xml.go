@@ -172,7 +172,8 @@ func (c *XMLUtil) rss(w http.ResponseWriter, r *http.Request) (status int, err e
 	}
 
 	for _, v := range posts {
-		html := c.Render.SanitizedHTML(v.Post.Content)
+		// Pass false as second parameter since RSS content doesn't need TOC
+		html := c.Render.SanitizedHTML(v.Post.Content, false)
 		m.Items = append(m.Items, Item{
 			Title:   v.Title,
 			Link:    site.SiteURL() + "/" + v.FullURL(),
