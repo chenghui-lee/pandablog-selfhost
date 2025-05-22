@@ -14,6 +14,7 @@ import (
 
 // SanitizedHTML returns a sanitized content html.
 func (te *Engine) SanitizedHTML(content string, isPost bool) []byte {
+	var toc []byte
 	// Ensure unit line endings are used when pulling out of JSON.
 	markdownWithUnixLineEndings := strings.Replace(content, "\r\n", "\n", -1)
 	htmlCode := blackfriday.Run([]byte(markdownWithUnixLineEndings))
@@ -25,12 +26,8 @@ func (te *Engine) SanitizedHTML(content string, isPost bool) []byte {
 
 	// Add table of contents if this is a blog post
 	if isPost {
-		// Add IDs to headings if they don't have them
-		htmlCode = addIDsToHeadings(htmlCode)
-
-		// Generate table of contents
-		toc := generateTableOfContents(htmlCode)
-
+		// Generate table of contents and assign IDs to headings
+		htmlCode, toc = generateTableOfContents(htmlCode)
 		// Add back to top button
 		backToTop := []byte(`<div id="back-to-top" title="Back to Top">↑</div>`)
 
@@ -92,17 +89,18 @@ func slugify(text string) string {
 	return slug
 }
 
-// generateTableOfContents parses HTML content and generates a table of contents
-func generateTableOfContents(htmlContent []byte) []byte {
+// generateTableOfContents parses HTML content, assigns IDs to headings, and generates a table of contents
+// Returns the updated HTML content and the TOC HTML
+func generateTableOfContents(htmlContent []byte) ([]byte, []byte) {
 	// If no headings, return empty TOC
 	if !bytes.Contains(htmlContent, []byte("<h")) {
-		return []byte("")
+		return htmlContent, []byte("")
 	}
-	
+
 	// Parse the HTML content
 	doc, err := html.Parse(bytes.NewReader(htmlContent))
 	if err != nil {
-		return []byte("")
+		return htmlContent, []byte("")
 	}
 	
 	// Define a heading structure
@@ -116,31 +114,37 @@ func generateTableOfContents(htmlContent []byte) []byte {
 	var headings []heading
 	var posCounter int
 	
-	// Walk the HTML tree to find headings
+	// Walk the HTML tree to find headings and assign IDs
 	var walk func(*html.Node)
 	walk = func(n *html.Node) {
 		if n.Type == html.ElementNode {
 			// Check if this is a heading element (h1-h6)
 			if len(n.Data) == 2 && n.Data[0] == 'h' && n.Data[1] >= '1' && n.Data[1] <= '6' {
 				level := int(n.Data[1] - '0') // Convert '1'..'6' to 1..6
-				
+
 				// Look for an ID attribute
 				var id string
-				for _, attr := range n.Attr {
+				idIdx := -1
+				for i, attr := range n.Attr {
 					if attr.Key == "id" {
 						id = attr.Val
+						idIdx = i
 						break
 					}
 				}
-				
-				// If no ID found, generate one from the heading text
+
+				// If no ID found, generate one from the heading text and assign it
 				if id == "" {
 					id = slugify(renderText(n))
+					n.Attr = append(n.Attr, html.Attribute{Key: "id", Val: id})
+				} else if idIdx == -1 {
+					// Defensive: if id is set but not in Attr, add it
+					n.Attr = append(n.Attr, html.Attribute{Key: "id", Val: id})
 				}
-				
+
 				// Get the heading text content
 				title := renderText(n)
-				
+
 				// Add to our headings slice
 				headings = append(headings, heading{
 					level:    level,
@@ -148,24 +152,27 @@ func generateTableOfContents(htmlContent []byte) []byte {
 					title:    title,
 					position: posCounter,
 				})
-				
+
 				posCounter++
 			}
 		}
-		
+
 		// Recursively process child nodes
 		for c := n.FirstChild; c != nil; c = c.NextSibling {
 			walk(c)
 		}
 	}
-	
+
 	// Start the walk from the document root
 	walk(doc)
 	
 	if len(headings) == 0 {
-		return []byte("")
+		// Return the possibly updated HTML content (with IDs) and empty TOC
+		var buf bytes.Buffer
+		html.Render(&buf, doc)
+		return buf.Bytes(), []byte("")
 	}
-	
+
 	// Generate TOC HTML
 	var toc bytes.Buffer
 	toc.WriteString(`<div class="table-of-contents">`)
@@ -193,43 +200,10 @@ func generateTableOfContents(htmlContent []byte) []byte {
 	toc.WriteString(`</div>`)
 	toc.WriteString(`</div>`)
 	
-	return toc.Bytes()
+	// Render the updated HTML with IDs
+	var buf bytes.Buffer
+	html.Render(&buf, doc)
+
+	return buf.Bytes(), toc.Bytes()
 }
 
-// addIDsToHeadings adds IDs to headings that don't have them
-func addIDsToHeadings(htmlContent []byte) []byte {
-	// Process each heading level separately since Go regex doesn't support backreferences
-	for level := 1; level <= 6; level++ {
-		// Find all h{level} headings
-		headingPattern := fmt.Sprintf(`<h%d([^>]*)>(.*?)</h%d>`, level, level)
-		allHeadingsRe := regexp.MustCompile(headingPattern)
-		
-		// Find headings with IDs
-		headingsWithIDRe := regexp.MustCompile(`id=["']([^"']+)["']`)
-		
-		// Replace each heading with a version that has an ID
-		htmlContent = allHeadingsRe.ReplaceAllFunc(htmlContent, func(match []byte) []byte {
-			// Skip if it already has an ID
-			if headingsWithIDRe.Match(match) {
-				return match
-			}
-			
-			submatches := allHeadingsRe.FindSubmatch(match)
-			attrs := string(submatches[1])
-			content := string(submatches[2])
-			
-			// Remove any HTML tags for the ID
-			plainContent := regexp.MustCompile(`<[^>]*>`).ReplaceAllString(content, "")
-			
-			// Create a slug from the content
-			slug := strings.ToLower(plainContent)
-			slug = regexp.MustCompile(`[^a-z0-9]+`).ReplaceAllString(slug, "-")
-			slug = strings.Trim(slug, "-")
-			
-			// Create a new heading with the ID
-			return []byte(fmt.Sprintf(`<h%d id="%s"%s>%s</h%d>`, level, slug, attrs, content, level))
-		})
-	}
-	
-	return htmlContent
-}
