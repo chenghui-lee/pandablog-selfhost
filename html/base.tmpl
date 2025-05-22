@@ -72,6 +72,8 @@
         </script>
         {{end}}
     </main>
+<!-- End of main content -->
+
     <footer>
         {{template "footer" .}}
     </footer>
@@ -149,6 +151,49 @@
     });
     </script>
     {{end}}
+    <!-- Image Zoom Modal Markup -->
+    <div class="image-zoom-modal" id="image-zoom-modal" tabindex="-1" aria-modal="true" role="dialog"></div>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Image Zoom Functionality
+      var modal = document.getElementById('image-zoom-modal');
+      var modalImg = null;
+      
+      // Delegate click event for images in <main>
+      document.querySelector('main').addEventListener('click', function(e) {
+        if (e.target && e.target.tagName === 'IMG') {
+          var src = e.target.getAttribute('src');
+          if (!modalImg) {
+            modalImg = document.createElement('img');
+            modal.appendChild(modalImg);
+          }
+          modalImg.src = src;
+          modal.classList.add('active');
+          document.body.style.overflow = 'hidden';
+        }
+      });
+      // Close modal on click outside image or on ESC
+      modal.addEventListener('click', function(e) {
+        if (e.target === modal || e.target === modalImg) {
+          modal.classList.remove('active');
+          document.body.style.overflow = '';
+        }
+      });
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && modal.classList.contains('active')) {
+          modal.classList.remove('active');
+          document.body.style.overflow = '';
+        }
+      });
+      // Close modal with the × icon
+      modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+          modal.classList.remove('active');
+          document.body.style.overflow = '';
+        }
+      });
+    });
+    </script>
 </body>
 
 </html>

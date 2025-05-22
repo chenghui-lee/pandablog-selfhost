@@ -1,7 +1,7 @@
 {{define "head"}}
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0,user-scalable=0"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{if .title}}{{.title}} | {{end}}{{SiteTitle}}</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>{{SiteFavicon}}</text></svg>">
     {{if StylesAppend}}<link rel="stylesheet" href="{{"/assets/css/style.css" | AssetStamp}}">{{end}}
@@ -41,19 +41,16 @@
         padding: 15px 20px;
         margin-bottom: 20px;
     }
-    
     .toc-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
         margin-bottom: 10px;
     }
-    
     .toc-header h2 {
         margin: 0;
         font-size: 1.2em;
     }
-    
     #toc-toggle {
         background: none;
         border: none;
@@ -64,45 +61,37 @@
         padding: 0 5px;
         line-height: 1;
     }
-    
     #toc-toggle:hover {
         color: #333;
     }
-    
     .toc-content {
         transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
         overflow: hidden;
         max-height: 1000px; /* Large enough to contain content */
         opacity: 1;
     }
-    
     .toc-content.collapsed {
         max-height: 0;
         opacity: 0;
         margin-top: 0;
         margin-bottom: 0;
     }
-    
     .table-of-contents ul {
         list-style-type: none;
         padding-left: 0;
         margin-bottom: 0;
     }
-    
     .table-of-contents li {
         margin-bottom: 5px;
         line-height: 1.5;
     }
-    
     .table-of-contents a {
         color: #0366d6;
         text-decoration: none;
     }
-    
     .table-of-contents a:hover {
         text-decoration: underline;
     }
-    
     /* Back to Top button styles */
     #back-to-top {
         display: none;
@@ -122,9 +111,33 @@
         z-index: 99;
         transition: opacity 0.3s;
     }
-    
     #back-to-top:hover {
         opacity: 1;
+    }
+    /* Dark mode styles for Table of Contents */
+    @media (prefers-color-scheme: dark) {
+      .table-of-contents {
+        background-color: #23272e;
+        border-color: #373b41;
+      }
+      .toc-header h2 {
+        color: #fff;
+      }
+      #toc-toggle {
+        color: #bbb;
+      }
+      #toc-toggle:hover {
+        color: #fff;
+      }
+      .table-of-contents li {
+        color: #eee;
+      }
+      .table-of-contents a {
+        color: #4ea1f7;
+      }
+      .table-of-contents a:hover {
+        color: #90cdf4;
+      }
     }
     </style>
     {{if SiteStyles}}
@@ -132,5 +145,52 @@
     {{SiteStyles}}
     </style>
     {{end}}
+    <style>
+    /* Image Zoom Modal Styles */
+    .image-zoom-modal {
+      display: none;
+      position: fixed;
+      z-index: 10000;
+      left: 0;
+      top: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0,0,0,0.8);
+      justify-content: center;
+      align-items: center;
+      transition: opacity 0.2s;
+    }
+    .image-zoom-modal.active {
+      display: flex;
+    }
+    .image-zoom-modal img {
+      max-width: 90vw;
+      max-height: 90vh;
+      border-radius: 6px;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.5);
+      background: #fff;
+      object-fit: contain;
+      transition: box-shadow 0.2s;
+    }
+    .image-zoom-modal:after {
+      content: '\00d7';
+      position: absolute;
+      top: 24px;
+      right: 40px;
+      color: #fff;
+      font-size: 2.5rem;
+      font-weight: bold;
+      cursor: pointer;
+      z-index: 10001;
+      text-shadow: 0 2px 8px #000;
+      pointer-events: auto;
+    }
+    @media (prefers-color-scheme: dark) {
+      .image-zoom-modal img {
+        background: #23272e;
+        box-shadow: 0 2px 16px #111;
+      }
+    }
+    </style>
 </head>
 {{end}}
