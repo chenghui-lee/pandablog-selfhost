@@ -178,9 +178,9 @@ func generateTableOfContents(htmlContent []byte) ([]byte, []byte) {
 	toc.WriteString(`<div class="table-of-contents">`)
 	toc.WriteString(`<div class="toc-header">`)
 	toc.WriteString(`<h2>Table of Contents</h2>`)
-	toc.WriteString(`<button id="toc-toggle" aria-expanded="true" aria-controls="toc-list">−</button>`)
+	toc.WriteString(`<button id="toc-toggle" aria-expanded="false" aria-controls="toc-list">+</button>`)
 	toc.WriteString(`</div>`)
-	toc.WriteString(`<div id="toc-list" class="toc-content">`)
+	toc.WriteString(`<div id="toc-list" class="toc-content collapsed">`)
 	toc.WriteString(`<ul>`)
 	
 	for _, h := range headings {
