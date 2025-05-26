@@ -71,6 +71,10 @@ img {
     max-width: 100%;
 }
 
+main img {
+    cursor: pointer;
+}
+
 code {
     padding: 2px 5px;
     background-color: #f2f2f2;
