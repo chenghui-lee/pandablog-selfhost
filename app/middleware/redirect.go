@@ -49,7 +49,12 @@ func (c *Handler) Redirect(next http.Handler) http.Handler {
 
 		// Strip trailing slash.
 		if r.URL.Path != "/" && strings.HasSuffix(r.URL.Path, "/") {
-			http.Redirect(w, r, strings.TrimRight(r.URL.Path, "/"), http.StatusPermanentRedirect)
+			target := strings.TrimRight(r.URL.Path, "/")
+			// Collapse any leading slashes so the Location header is not a
+			// protocol-relative URL (e.g. "//dashboard" would be interpreted
+			// by browsers as the host "dashboard").
+			target = "/" + strings.TrimLeft(target, "/")
+			http.Redirect(w, r, target, http.StatusPermanentRedirect)
 			return
 		}
 
