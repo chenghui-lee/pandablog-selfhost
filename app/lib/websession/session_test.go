@@ -1,6 +1,7 @@
 package websession_test
 
 import (
+	"context"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
@@ -81,4 +82,50 @@ func TestNewSession(t *testing.T) {
 
 	mw := sessionManager.LoadAndSave(mux)
 	mw.ServeHTTP(w, r)
+}
+
+func TestRenewToken(t *testing.T) {
+	f := filepath.Join(t.TempDir(), "data.bin")
+	if err := os.WriteFile(f, []byte(""), 0644); err != nil {
+		t.Fatalf("Failed to create %q: %v", f, err)
+	}
+	ss := datastorage.NewLocalStorage(f)
+	secretkey := "82a18fbbfed2694bb15d512a70c53b1a088e669966918d3d474564b2ac44349b"
+	en := websession.NewEncryptedStorage(secretkey)
+	store, err := websession.NewJSONSession(ss, en)
+	if err != nil {
+		t.Fatalf("Failed to create json session: %v", err)
+	}
+
+	sessionManager := scs.New()
+	sessionManager.Lifetime = 24 * time.Hour
+	sessionManager.Store = store
+	sess := websession.New("session", sessionManager)
+
+	ctx, err := sessionManager.Load(context.Background(), "")
+	if err != nil {
+		t.Fatalf("Failed to load session: %v", err)
+	}
+	r := httptest.NewRequest("GET", "/", nil).WithContext(ctx)
+
+	sess.SetUser(r, "admin")
+	token1, _, err := sessionManager.Commit(r.Context())
+	if err != nil {
+		t.Fatalf("Failed to commit first session: %v", err)
+	}
+
+	if err := sess.RenewToken(r); err != nil {
+		t.Fatalf("RenewToken failed: %v", err)
+	}
+
+	token2, _, err := sessionManager.Commit(r.Context())
+	if err != nil {
+		t.Fatalf("Failed to commit renewed session: %v", err)
+	}
+	if token1 == token2 {
+		t.Error("session token was not renewed")
+	}
+	if user, ok := sess.User(r); !ok || user != "admin" {
+		t.Errorf("user lost after token renewal: got %q, found %v", user, ok)
+	}
 }

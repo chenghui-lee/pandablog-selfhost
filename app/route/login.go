@@ -124,6 +124,12 @@ func (c *AuthUtil) loginPost(w http.ResponseWriter, r *http.Request) (status int
 
 	fmt.Printf("Login attempt successful.\n")
 
+	// Rotate the session token so an attacker who fixed the pre-login session
+	// cookie cannot reuse it after the login.
+	if err := c.Sess.RenewToken(r); err != nil {
+		return http.StatusInternalServerError, err
+	}
+
 	c.Sess.SetUser(r, username)
 	if remember == "on" {
 		c.Sess.RememberMe(r, true)

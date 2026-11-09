@@ -60,7 +60,7 @@ func setupRouter(tmpl *htmltemplate.Engine) *router.Mux {
 			if status == 404 {
 				errTemplate = "404"
 			}
-			status, err = tmpl.ErrorTemplate(w, r, "base", errTemplate, vars)
+			status, err = tmpl.ErrorTemplate(w, r, "base", errTemplate, status, vars)
 			if err != nil {
 				log.Println(err.Error())
 				http.Error(w, "500 internal server error", http.StatusInternalServerError)

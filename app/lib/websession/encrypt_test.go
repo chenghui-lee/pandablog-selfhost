@@ -24,3 +24,12 @@ func TestEncrypt(t *testing.T) {
 		t.Errorf("Decrypted got %q want %q", dec, raw)
 	}
 }
+
+func TestDecryptShortCiphertext(t *testing.T) {
+	key := "59f3726ba3f8271ddf32224b809c42e9ef4523865c74cb64e9d7d5a031f1f706"
+	en := NewEncryptedStorage(key)
+
+	if _, err := en.Decrypt([]byte("short")); err == nil {
+		t.Error("Decrypt should return an error for a short ciphertext")
+	}
+}

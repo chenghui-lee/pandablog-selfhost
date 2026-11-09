@@ -28,11 +28,11 @@ func (te *Engine) Template(w http.ResponseWriter, r *http.Request, mainTemplate 
 	return te.partialTemplate(w, r, mainTemplate, partialTemplate, http.StatusOK, vars)
 }
 
-// ErrorTemplate renders HTML to a response writer and returns a 404 status code
-// and an error if one occurs.
+// ErrorTemplate renders HTML to a response writer with the given status code
+// and returns that status code and an error if one occurs.
 func (te *Engine) ErrorTemplate(w http.ResponseWriter, r *http.Request, mainTemplate string,
-	partialTemplate string, vars map[string]any) (status int, err error) {
-	return te.partialTemplate(w, r, mainTemplate, partialTemplate, http.StatusNotFound, vars)
+	partialTemplate string, statusCode int, vars map[string]any) (status int, err error) {
+	return te.partialTemplate(w, r, mainTemplate, partialTemplate, statusCode, vars)
 }
 
 // partialTemplate converts content from markdown to HTML and then outputs to

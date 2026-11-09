@@ -78,3 +78,39 @@ func TestDisallowAnonAllowsAuthenticatedUser(t *testing.T) {
 		t.Errorf("status got %v want %v", got, want)
 	}
 }
+
+func TestDisallowAuth(t *testing.T) {
+	manager := scs.New()
+	sess := websession.New("session", manager)
+	h := middleware.NewHandler(nil, sess, nil, "", "")
+
+	next := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+	})
+	mw := h.DisallowAuth(next)
+
+	// Anonymous users are allowed through.
+	ctx, err := manager.Load(context.Background(), "")
+	if err != nil {
+		t.Fatalf("manager.Load failed: %v", err)
+	}
+	r := httptest.NewRequest(http.MethodGet, "/login/admin", nil).WithContext(ctx)
+	w := httptest.NewRecorder()
+	mw.ServeHTTP(w, r)
+	if got, want := w.Code, http.StatusOK; got != want {
+		t.Errorf("anonymous status got %v want %v", got, want)
+	}
+
+	// Authenticated users are redirected away.
+	ctx, err = manager.Load(context.Background(), "")
+	if err != nil {
+		t.Fatalf("manager.Load failed: %v", err)
+	}
+	r = httptest.NewRequest(http.MethodGet, "/login/admin", nil).WithContext(ctx)
+	sess.SetUser(r, "admin")
+	w = httptest.NewRecorder()
+	mw.ServeHTTP(w, r)
+	if got, want := w.Code, http.StatusFound; got != want {
+		t.Errorf("authenticated status got %v want %v", got, want)
+	}
+}

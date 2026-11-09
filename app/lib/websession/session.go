@@ -37,6 +37,12 @@ func (s *Session) Logout(r *http.Request) {
 	s.manager.Destroy(r.Context())
 }
 
+// RenewToken generates a new session token for the request. Call it after a
+// successful login to prevent session fixation.
+func (s *Session) RenewToken(r *http.Request) error {
+	return s.manager.RenewToken(r.Context())
+}
+
 // User -
 func (s *Session) User(r *http.Request) (string, bool) {
 	u := s.manager.GetString(r.Context(), "user")
@@ -58,12 +64,16 @@ func (s *Session) SetString(r *http.Request, name string, value string) {
 	s.manager.Put(r.Context(), name, value)
 }
 
-// SetCSRF -
-func (s *Session) SetCSRF(r *http.Request) string {
+// SetCSRFForPath generates a CSRF token for the given path.
+func (s *Session) SetCSRFForPath(r *http.Request, path string) string {
 	token := generate(32)
-	path := "csrf_" + r.URL.Path
-	s.SetString(r, path, token)
+	s.SetString(r, "csrf_"+path, token)
 	return token
+}
+
+// SetCSRF generates a CSRF token for the request path.
+func (s *Session) SetCSRF(r *http.Request) string {
+	return s.SetCSRFForPath(r, r.URL.Path)
 }
 
 // CSRF -
@@ -86,8 +96,11 @@ func (s *Session) CSRF(r *http.Request) bool {
 // Source: https://devpy.wordpress.com/2013/10/24/create-random-string-in-golang/
 func generate(length int) string {
 	alphanum := "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
-	var bytes = make([]byte, length)
-	rand.Read(bytes)
+	bytes := make([]byte, length)
+	if _, err := rand.Read(bytes); err != nil {
+		// Never silently fall back to a predictable all-zero token.
+		panic("websession: failed to read random bytes: " + err.Error())
+	}
 	for i, b := range bytes {
 		bytes[i] = alphanum[b%byte(len(alphanum))]
 	}

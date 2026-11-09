@@ -37,7 +37,7 @@ func (s *JSONSession) Find(token string) (b []byte, exists bool, err error) {
 	}
 
 	record, found := sd.Records[token]
-	if !found {
+	if !found || !record.Expire.After(time.Now()) {
 		return nil, false, nil
 	}
 
@@ -51,6 +51,14 @@ func (s *JSONSession) Commit(token string, b []byte, expiry time.Time) error {
 	err := sd.Load(s.sessionstorer, s.encrypter)
 	if err != nil {
 		return err
+	}
+
+	// Remove expired sessions so the store does not grow without bound.
+	now := time.Now()
+	for t, record := range sd.Records {
+		if !record.Expire.After(now) {
+			delete(sd.Records, t)
+		}
 	}
 
 	sd.Records[token] = SessionData{ID: token, Data: b, Expire: expiry}

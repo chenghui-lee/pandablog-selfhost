@@ -5,6 +5,7 @@ import (
 	"crypto/cipher"
 	"crypto/rand"
 	"encoding/hex"
+	"fmt"
 	"io"
 )
 
@@ -82,6 +83,9 @@ func (en *EncryptedStorage) Decrypt(enc []byte) ([]byte, error) {
 
 	// Create a nonce.
 	nonceSize := aesGCM.NonceSize()
+	if len(enc) < nonceSize {
+		return nil, fmt.Errorf("ciphertext too short: got %d bytes, need at least %d", len(enc), nonceSize)
+	}
 
 	// Extract the nonce from the encrypted data.
 	nonce, ciphertext := enc[:nonceSize], enc[nonceSize:]

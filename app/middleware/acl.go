@@ -9,7 +9,7 @@ import (
 func (c *Handler) DisallowAuth(h http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// If user is authenticated, don't allow them to access the page.
-		if _, loggedIn := c.Sess.User(r); !loggedIn {
+		if _, loggedIn := c.Sess.User(r); loggedIn {
 			http.Redirect(w, r, "/", http.StatusFound)
 			return
 		}

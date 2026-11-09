@@ -21,7 +21,7 @@ func registerAdminPost(c *AdminPost) {
 	c.Router.Post("/dashboard/posts/new", c.store)
 	c.Router.Get("/dashboard/posts/:id", c.edit)
 	c.Router.Post("/dashboard/posts/:id", c.update)
-	c.Router.Get("/dashboard/posts/:id/delete", c.destroy)
+	c.Router.Post("/dashboard/posts/:id/delete", c.destroy)
 }
 
 func (c *AdminPost) index(w http.ResponseWriter, r *http.Request) (status int, err error) {
@@ -117,6 +117,7 @@ func (c *AdminPost) edit(w http.ResponseWriter, r *http.Request) (status int, er
 	}
 
 	vars["id"] = ID
+	vars["deleteToken"] = c.Sess.SetCSRFForPath(r, "/dashboard/posts/"+ID+"/delete")
 	vars["ptitle"] = p.Title
 	vars["url"] = p.URL
 	vars["canonical"] = p.Canonical
@@ -190,6 +191,13 @@ func (c *AdminPost) destroy(w http.ResponseWriter, r *http.Request) (status int,
 	}
 
 	ID := way.Param(r.Context(), "id")
+
+	r.ParseForm()
+
+	// CSRF protection.
+	if !c.Sess.CSRF(r) {
+		return http.StatusBadRequest, nil
+	}
 
 	var ok bool
 	if _, ok = site.PostByID(ID); !ok {
